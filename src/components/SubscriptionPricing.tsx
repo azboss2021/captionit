@@ -62,7 +62,7 @@ const SubscriptionPricing = ({
                         : (plan.price / 100).toFixed(2)}
                     </span>
                   )}
-                  <span className="text-4xl font-extrabold tracking-tight">
+                  <span className="text-4xl font-bold tracking-tight">
                     $
                     {(plan.price * (1 - DISCOUNT)) % 100 === 0
                       ? (plan.price * (1 - DISCOUNT)) / 100
@@ -171,7 +171,7 @@ const SubscriptionPricing = ({
                         : ((plan.price * 12) / 100).toFixed(2)}
                     </span>
                   )}
-                  <span className="text-4xl font-extrabold tracking-tight">
+                  <span className="text-4xl font-bold tracking-tight">
                     $
                     {(plan.price *
                       12 *

@@ -19,9 +19,9 @@ const SupportPage = () => {
         <Navbar />
       </div>
 
-      <section className="mx-auto flex max-w-3xl flex-col gap-8 p-8">
+      <section className="mx-auto flex max-w-7xl flex-col gap-8 p-8">
         <LeaveButton />
-        <h2 className="text-xl font-extrabold">Support Form</h2>
+        <h2 className="text-xl font-bold">Support Form</h2>
         <p>
           If you have any questions, concerns, feedback, bug reports, etc. leave
           it below and it will be read within 48 hours.

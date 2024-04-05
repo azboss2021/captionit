@@ -1,10 +1,9 @@
 export const SAAS_NAME = "CaptionIt";
 
-export const SAAS_SLOGAN = "Create unique AI memes with popular prompts";
+export const SAAS_SLOGAN = "Create unique AI images with custom captions";
 
 export const SAAS_DESCRIPTION =
-  "You can quickly create some interesting images with captions and share them with others. They can be funny, interesting, heartbreaking, etc.";
-// "Give the customers the most concise accurate description of your saas here. Keep it short as well, people have short attention spans nowadays.";
+  "Quickly generate AI images with styles of your choice. Then add some customizeable captions to share with others.";
 
 export const SAAS_URL = "mysaas.com";
 
@@ -59,7 +58,7 @@ export const MAILING_LIST = {
 };
 
 export const ANNUAL_DISCOUNT = 0.2;
-export const DISCOUNT = 0.1;
+export const DISCOUNT = 0;
 
 export const IMAGE_RATIOS: {
   ratio: string;
@@ -80,12 +79,12 @@ export const IMAGE_RATIOS: {
   },
   {
     ratio: "landscape",
-    size: "1024x1792",
+    size: "1792x1024",
     cost: 10,
   },
   {
     ratio: "portrait",
-    size: "1792x1024",
+    size: "1024x1792",
     cost: 10,
   },
 ];
@@ -132,26 +131,30 @@ export const CREDIT_PLANS = [
     _id: 1,
     name: "Some Credits",
     description: "Some credits for you :)",
-    price: 500,
-    credits: 50,
+    price: 800,
+    credits: 200,
     bestChoice: false,
     useBadge: false,
     inclusions: [
       {
-        label: "Feature 1",
+        label: "20 Normal Standard Images",
         isIncluded: true,
       },
       {
-        label: "Feature 2",
+        label: "~13 Large Standard Images",
         isIncluded: true,
       },
       {
-        label: "Feature 3",
+        label: "~13 Normal HD Images",
         isIncluded: true,
       },
       {
-        label: "Feature 4",
+        label: "10 Large HD Images",
         isIncluded: true,
+      },
+      {
+        label: "+0 Extra Credits",
+        isIncluded: false,
       },
     ],
     buttonExtra: "Do this now!",
@@ -159,26 +162,30 @@ export const CREDIT_PLANS = [
   {
     _id: 1,
     name: "More Credits",
-    description: "A lot more credits :P",
-    price: 1200,
-    credits: 150,
+    description: "A lot more credits :D",
+    price: 4000,
+    credits: 1250,
     bestChoice: true,
     useBadge: false,
     inclusions: [
       {
-        label: "Generate 50 Small Images",
+        label: "125 Normal Standard Images",
         isIncluded: true,
       },
       {
-        label: "Feature 2",
+        label: "~83 Large Standard",
         isIncluded: true,
       },
       {
-        label: "Feature 3",
+        label: "~83 Normal HD Images",
         isIncluded: true,
       },
       {
-        label: "Feature 4",
+        label: "~62 Large HD Images",
+        isIncluded: true,
+      },
+      {
+        label: "+250 Extra Credits",
         isIncluded: true,
       },
     ],
@@ -268,12 +275,12 @@ export const FAQ_LINKS = {
 
 export const FAQ_QUESTIONS = [
   {
-    question: "What is the question?",
-    answer: "This is the answer to your question 1!",
+    question: "How many images can I generate for free?",
+    answer: "Everyone with an account can generate a free standard size image.",
   },
   {
-    question: "What is the question?",
-    answer: "This is the answer to your question 2!",
+    question: "What styles are there to choose from?",
+    answer: "Styles are still being added.",
   },
   {
     question: "What is the question?",
@@ -290,13 +297,5 @@ export const FAQ_QUESTIONS = [
   {
     question: "What is the question?",
     answer: "This is the answer to your question 6!",
-  },
-  {
-    question: "What is the question?",
-    answer: "This is the answer to your question 7!",
-  },
-  {
-    question: "What is the question?",
-    answer: "This is the answer to your question 8!",
   },
 ];

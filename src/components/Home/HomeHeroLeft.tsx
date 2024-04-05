@@ -9,7 +9,10 @@ const HomeHeroLeft = () => {
     <div className="flex basis-1/2 flex-col items-center justify-center gap-10 text-center lg:items-start lg:text-left">
       {/* <HomeSingleTestimonial /> */}
 
-      <h1 className="text-4xl font-bold tracking-tight lg:text-6xl lg:leading-tight">
+      <h1
+        className="text-4xl font-bold tracking-tight lg:text-6xl"
+        style={{ lineHeight: 1.1 }}
+      >
         {SAAS_SLOGAN}
       </h1>
 

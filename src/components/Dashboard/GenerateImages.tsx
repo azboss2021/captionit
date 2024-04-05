@@ -7,10 +7,18 @@ import GenerateImageShow from "./GenerateImageShow";
 
 const GenerateImages = () => {
   const [phase, setPhase] = useState(0);
+  const [loadingState, setLoadingState] = useState(
+    "Sending prompt to our artists...",
+  );
 
-  if (phase === 0) return <GenerateImageForm setPhase={setPhase} />;
-  if (phase === 1) return <GenerateImageProgress setPhase={setPhase} />;
-  if (phase === 2) return <GenerateImageShow setPhase={setPhase} />;
+  if (phase === 0)
+    return (
+      <GenerateImageForm
+        setPhase={setPhase}
+        setLoadingState={setLoadingState}
+      />
+    );
+  if (phase === 1) return <GenerateImageProgress loadingState={loadingState} />;
 };
 
 export default GenerateImages;

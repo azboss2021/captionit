@@ -42,7 +42,7 @@ const HomeFooter = () => {
 
       <div className="flex flex-col gap-10 lg:flex-row lg:gap-24">
         <div className="flex flex-col gap-3 text-center lg:text-left">
-          <h3 className="font-extrabold tracking-wide text-muted-foreground">
+          <h3 className="font-bold tracking-wide text-muted-foreground">
             LINKS
           </h3>
           <div className="flex flex-col gap-1.5 ">
@@ -61,7 +61,7 @@ const HomeFooter = () => {
         </div>
 
         <div className="flex flex-col gap-3 text-center lg:text-left">
-          <h3 className="font-extrabold tracking-wide text-muted-foreground">
+          <h3 className="font-bold tracking-wide text-muted-foreground">
             LEGAL
           </h3>
           <div className="flex flex-col gap-1.5 ">
@@ -76,7 +76,7 @@ const HomeFooter = () => {
 
         {more && (
           <div className="flex flex-col gap-3 text-center lg:text-left">
-            <h3 className="font-extrabold tracking-wide text-muted-foreground">
+            <h3 className="font-bold tracking-wide text-muted-foreground">
               MORE
             </h3>
             <div className="flex flex-col gap-1.5 ">

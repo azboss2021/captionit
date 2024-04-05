@@ -224,7 +224,7 @@ export async function decreaseCredits(id: string, creditFee: number) {
 
     const updatedUserCredits = await User.findOneAndUpdate(
       { _id: id },
-      { $dec: { credits: creditFee } },
+      { $inc: { credits: -creditFee } },
       { new: true },
     );
 

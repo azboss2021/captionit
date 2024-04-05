@@ -27,7 +27,7 @@ const AccountPage = async () => {
         <Navbar />
       </div>
 
-      <section className="mx-auto flex max-w-3xl flex-col gap-12 p-8">
+      <section className="mx-auto flex max-w-7xl flex-col gap-8 p-8">
         <LeaveButton />
         <AccountInformation user={user} />
         <AccountActions user={user} />

@@ -9,7 +9,7 @@ const CreditPlan = ({ credits }: { credits: number }) => {
       </div>
       <div className="flex items-center gap-4">
         <FaCoins size={28} />
-        <span className="text-3xl font-extrabold">{credits}</span>
+        <span className="text-3xl font-bold">{credits}</span>
       </div>
     </section>
   );

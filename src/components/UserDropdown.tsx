@@ -40,49 +40,49 @@ const UserDropdown = ({ image }: { image: string }) => {
         <DropdownMenuItem className="p-4" asChild>
           <Link
             href="/dashboard"
-            className="flex cursor-pointer items-center gap-2 p-4"
+            className="flex cursor-pointer items-center justify-between p-4"
           >
-            <FaHome size={14} /> Dashboard
+            Dashboard <FaHome size={14} />
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem className="p-4" asChild>
           <Link
             href="/account"
-            className="flex cursor-pointer items-center gap-2 p-4"
+            className="flex cursor-pointer items-center justify-between p-4"
           >
-            <FaUser size={14} /> Account
+            Account <FaUser size={14} />
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem className="p-4" asChild>
           <Link
             href="/credits"
-            className="flex cursor-pointer items-center gap-2 p-4"
+            className="flex cursor-pointer items-center justify-between p-4"
           >
-            <FaCrown size={14} /> Credits
+            Credits <FaCrown size={14} />
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem className="p-4" asChild>
           <Link
             href="/support"
-            className="flex cursor-pointer items-center gap-2 p-4"
+            className="flex cursor-pointer items-center justify-between p-4"
           >
-            <FaTools size={14} /> Support
+            Support <FaTools size={14} />
           </Link>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem
-          className="flex cursor-pointer items-center gap-2 p-4"
+          className="flex cursor-pointer items-center justify-between p-4"
           onClick={() =>
             theme === "dark" ? setTheme("light") : setTheme("dark")
           }
         >
           {theme === "dark" ? (
             <>
-              <FaMoon size={14} /> Dark Theme
+              Dark Theme <FaMoon size={14} />
             </>
           ) : (
             <>
-              <FaSun size={14} /> Light Theme
+              Light Theme <FaSun size={14} />
             </>
           )}
         </DropdownMenuItem>
@@ -92,14 +92,14 @@ const UserDropdown = ({ image }: { image: string }) => {
             setLoading(true);
             await signOut({ callbackUrl: "/" });
           }}
-          className="flex cursor-pointer items-center gap-2 p-4"
+          className="flex cursor-pointer items-center justify-between p-4 text-destructive"
         >
+          Logout{" "}
           {loading ? (
             <Loader2 className="h-4 w-4 animate-spin" size={14} />
           ) : (
             <FaUnlock size={14} />
           )}
-          Logout
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

@@ -34,7 +34,7 @@ const HomeCTAButton = ({ className }: { className?: string }) => {
           <LogoImage />
         </span>
       )} */}
-      Create Some Memes
+      Generate Images
     </LoadingButton>
   );
 };

@@ -46,7 +46,7 @@ const HomePage = async () => {
       <HomeFAQ />
 
       {/* <section className="bg-primary/5"> */}
-      <HomeCTA />
+      {/* <HomeCTA /> */}
       {/* </section> */}
 
       <div className="border-t bg-background">

@@ -4,7 +4,7 @@ import { dateToShortDate } from "@/lib/utils";
 const AccountInformation = ({ user }: { user: DatabaseUser }) => {
   return (
     <section className="flex flex-col gap-4">
-      <h2 className="text-xl font-extrabold">Account Information</h2>
+      <h2 className="text-xl font-bold">Account Information</h2>
       <div className="flex flex-col gap-1">
         <span>
           <span className="font-bold">Name: </span>

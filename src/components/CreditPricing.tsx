@@ -45,7 +45,7 @@ const CreditPricing = ({ id }: { id?: string }) => {
                     : (plan.price / 100).toFixed(2)}
                 </span>
               )}
-              <span className="text-4xl font-extrabold tracking-tight">
+              <span className="text-4xl font-bold tracking-tight">
                 $
                 {(plan.price * (1 - DISCOUNT)) % 100 === 0
                   ? (plan.price * (1 - DISCOUNT)) / 100
@@ -58,7 +58,7 @@ const CreditPricing = ({ id }: { id?: string }) => {
             )}
 
             {plan.credits && (
-              <span className="mb-1 mt-1 flex items-center gap-2 text-3xl font-extrabold">
+              <span className="mb-1 mt-1 flex items-center gap-2 text-3xl font-bold">
                 <FaCoins /> {plan.credits}
               </span>
             )}

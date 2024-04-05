@@ -1,12 +1,14 @@
 import NavLogo from "../NavLogo";
 import Link from "next/link";
 import { ModeToggle } from "../theme-toggle";
+import HomeCTAButton from "./HomeCTAButton";
+import SignInButton from "./SignInButton";
 
 const HomeNavbar = () => {
   return (
-    <nav className="mx-auto flex w-full max-w-7xl items-center justify-between px-8 py-5 sm:justify-start sm:gap-8">
+    <nav className="mx-auto flex w-full max-w-7xl items-center justify-between px-6 py-6">
       <NavLogo home={true} />
-      <>
+      <div className="flex items-center gap-12">
         <Link
           href="#pricing"
           className="hidden hover:underline md:block"
@@ -29,9 +31,10 @@ const HomeNavbar = () => {
           FAQ
         </Link>
         {/* <LongModeToggle /> */}
-        <ModeToggle />
+        {/* <ModeToggle /> */}
         {/* <Link href="#testimonials">Testimonials</Link> */}
-      </>
+      </div>
+      <SignInButton />
     </nav>
   );
 };

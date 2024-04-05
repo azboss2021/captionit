@@ -16,9 +16,9 @@ const ProPage = () => {
         <Navbar />
       </div>
 
-      <section className="mx-auto flex max-w-3xl flex-col gap-8 p-8">
-        <LeaveButton />
-        {/* <h2 className="text-xl font-extrabold">Pricing Plan</h2> */}
+      <section className="mx-auto flex max-w-7xl flex-col gap-8 p-6 lg:p-8">
+        <LeaveButton dashboard={true} />
+        {/* <h2 className="text-xl font-bold">Pricing Plan</h2> */}
         <Pricing />
       </section>
     </>

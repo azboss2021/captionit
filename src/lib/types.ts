@@ -38,3 +38,27 @@ export type DatabaseUser = {
   createdAt: Date;
   updatedAt: Date;
 };
+
+export type CaptionType = {
+  _id: string;
+  imageId: string;
+  userId: string;
+  topText: string;
+  bottomText: string;
+  strokeWidth: number;
+  topTextSize: number;
+  bottomTextSize: number;
+  yPadding: number;
+  xPadding: number;
+  whiteSpace: number;
+  topTextAlign: string;
+  bottomTextAlign: string;
+  topTextVerticalAlign: string;
+  bottomTextVerticalAlign: string;
+  topTextHorizontalAlign: string;
+  bottomTextHorizontalAlign: string;
+  font: string;
+  italic: boolean;
+  bold: boolean;
+  uppercase: boolean;
+};

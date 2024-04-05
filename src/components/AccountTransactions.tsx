@@ -15,7 +15,7 @@ const AccountTransactions = ({
   return (
     transactions.length > 0 && (
       <section className="flex w-full flex-col gap-6">
-        <h2 className="text-xl font-extrabold">Transaction History</h2>
+        <h2 className="text-xl font-bold">Transaction History</h2>
         <div className="flex flex-col gap-2">
           {transactions.map((transaction, index) => (
             <Card key={`transaction_index_${index}`} className="p-4">

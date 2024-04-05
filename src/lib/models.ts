@@ -25,7 +25,7 @@ const UserSchema = new Schema(
     },
     credits: {
       type: Number,
-      default: 0,
+      default: 10,
     },
     admin: {
       type: Boolean,
@@ -98,7 +98,6 @@ const TransactionSchema = new Schema({
 
 const ImageSchema = new Schema(
   {
-    url: { type: String, required: true },
     author: {
       type: Schema.Types.ObjectId,
       ref: "User",
@@ -107,9 +106,93 @@ const ImageSchema = new Schema(
     size: {
       type: String,
     },
+    standard: {
+      type: Boolean,
+    },
+    cloudinaryId: {
+      type: String,
+    },
+    prompt: {
+      type: String,
+    },
+    style: {
+      type: String,
+    },
+    upvotes: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "User",
+        required: true,
+      },
+    ],
   },
   { timestamps: true },
 );
+
+const CaptionSchema = new Schema({
+  author: {
+    type: Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
+  },
+  imageId: {
+    type: String,
+  },
+  topText: {
+    type: String,
+  },
+  bottomText: {
+    type: String,
+  },
+  strokeWidth: {
+    type: Number,
+  },
+  topTextSize: {
+    type: Number,
+  },
+  bottomTextSize: {
+    type: Number,
+  },
+  yPadding: {
+    type: Number,
+  },
+  xPadding: {
+    type: Number,
+  },
+  whiteSpace: {
+    type: Number,
+  },
+  topTextAlign: {
+    type: String,
+  },
+  bottomTextAlign: {
+    type: String,
+  },
+  topTextVerticalAlign: {
+    type: String,
+  },
+  bottomTextVerticalAlign: {
+    type: String,
+  },
+  topTextHorizontalAlign: {
+    type: String,
+  },
+  bottomTextHorizontalAlign: {
+    type: String,
+  },
+  font: {
+    type: String,
+  },
+  italic: {
+    type: Boolean,
+  },
+  bold: {
+    type: Boolean,
+  },
+  uppercase: {
+    type: Boolean,
+  },
+});
 
 const Image = models?.Image || model("Image", ImageSchema);
 const User = models?.User || model("User", UserSchema);
@@ -119,5 +202,6 @@ const MailSubscriber =
   models?.MailSubscriber || model("MailSubscriber", MailSubscriberSchema);
 const Transaction =
   models?.Transaction || model("Transaction", TransactionSchema);
+const Caption = models?.Caption || model("Caption", CaptionSchema);
 
-export { Image, User, DeletedUser, MailSubscriber, Transaction };
+export { Image, User, DeletedUser, MailSubscriber, Transaction, Caption };

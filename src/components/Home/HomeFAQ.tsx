@@ -18,7 +18,7 @@ const HomeFAQ = ({ stack }: { stack?: boolean }) => {
       )}
     >
       <div className="flex basis-1/2 flex-col items-start gap-2">
-        <h3 className={`${stack ? "text-xl font-extrabold" : "title"}`}>
+        <h3 className={`${stack ? "text-xl font-bold" : "title"}`}>
           Frequently Asked Questions
         </h3>
         {stack ? null : (

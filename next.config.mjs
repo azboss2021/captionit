@@ -5,6 +5,12 @@ const nextConfig = {
       {
         hostname: "lh3.googleusercontent.com",
       },
+      {
+        hostname: "oaidalleapiprodscus.blob.core.windows.net",
+      },
+      {
+        hostname: "res.cloudinary.com",
+      },
     ],
   },
 };

@@ -14,20 +14,16 @@ import Link from "next/link";
 import { FaArrowRight } from "react-icons/fa6";
 
 const SingleLinkDialog = ({
-  buttonClassName,
   dialogTitle,
   dialogDescription,
-  triggerButtonContent,
   buttonContent,
   open,
   onOpenChange,
   buttonVariant,
   link,
 }: {
-  buttonClassName?: string;
   dialogTitle: string;
   dialogDescription: ReactNode | string;
-  triggerButtonContent: ReactNode | string;
   buttonContent: ReactNode | string;
   buttonVariant?:
     | "link"
@@ -44,11 +40,6 @@ const SingleLinkDialog = ({
 }) => {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogTrigger asChild>
-        <Button className={buttonClassName} variant={buttonVariant}>
-          {triggerButtonContent}
-        </Button>
-      </DialogTrigger>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>{dialogTitle}</DialogTitle>

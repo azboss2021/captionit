@@ -77,7 +77,7 @@ const AccountActions = ({ user }: { user: DatabaseUser }) => {
 
   return (
     <section className="flex flex-col gap-4">
-      <h2 className="text-xl font-extrabold">Account Actions</h2>
+      <h2 className="text-xl font-bold">Account Actions</h2>
       <div className="flex flex-col gap-1">
         <p>Manage Mailing List Subscription</p>
         {subscribed === null ? (

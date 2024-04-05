@@ -7,6 +7,8 @@ import stripe from "stripe";
 export async function POST(request: Request) {
   const body = await request.text();
 
+  console.log(body);
+
   const sig = request.headers.get("stripe-signature") as string;
   const endpointSecret = process.env.LOCAL_STRIPE_WEBHOOK_SECRET!;
 
@@ -23,7 +25,6 @@ export async function POST(request: Request) {
 
   // CREATE
   if (eventType === "checkout.session.completed") {
-    console.log("COMPLETE");
     const { id, amount_total, subscription, metadata } = event.data.object;
 
     if (subscription && PRODUCT_TYPE === "subscription") {

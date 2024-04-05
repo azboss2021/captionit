@@ -1,7 +1,6 @@
 "use client";
 
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Input } from "../ui/input";
 import {
   Form,
   FormControl,
@@ -15,15 +14,21 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import toast from "react-hot-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { generateImage } from "@/lib/actions/images.actions";
-import { Switch } from "../ui/switch";
+import { createImage, generateImage } from "@/lib/actions/images.actions";
 import { Textarea } from "../ui/textarea";
 import SingleLinkDialog from "../SingleLinkDialog";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { IMAGE_RATIOS } from "@/lib/constants";
+import { useSession } from "next-auth/react";
+import { decreaseCredits, getUserByEmail } from "@/lib/actions";
+import { FaCoins } from "react-icons/fa6";
+import { useRouter } from "next/navigation";
 
 const FormSchema = z.object({
-  prompt: z.string().min(10, "Prompt must be at least 10 characters long"),
+  prompt: z
+    .string()
+    .min(10, "Prompt must be between 10 - 1500 characters")
+    .max(1500, "Prompt must be between 10 - 1500 characters"),
   ratio: z.enum(["square", "landscape", "portrait"], {
     required_error: "You need to select an image ratio",
   }),
@@ -34,11 +39,33 @@ const FormSchema = z.object({
 
 const GenerateImageForm = ({
   setPhase,
+  setLoadingState,
 }: {
   setPhase: React.Dispatch<React.SetStateAction<number>>;
+  setLoadingState: React.Dispatch<React.SetStateAction<string>>;
 }) => {
-  const enoughCredits = false;
+  const [enoughCredits, setEnoughCredits] = useState<boolean | null>(null);
+  const [userId, setUserId] = useState<string | null>(null);
+  const [ratioCost, setRatioCost] = useState(5);
+  const [qualityCost, setQualityCost] = useState(5);
   const [open, setOpen] = useState(false);
+
+  const necessaryCredits = 5;
+  const { data: session } = useSession();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!session) return;
+    const getCredits = async () => {
+      const user = await getUserByEmail(session?.user?.email as string);
+      setUserId(user._id);
+      if (user.credits < necessaryCredits) {
+        setEnoughCredits(false);
+      } else setEnoughCredits(true);
+    };
+
+    getCredits();
+  }, [session]);
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -47,20 +74,62 @@ const GenerateImageForm = ({
       ratio: "square",
       standard: "standard",
     },
-    mode: "onChange",
+    // mode: "onChange",
   });
 
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
-    await generateImage({
+    if (enoughCredits === null)
+      return toast.error("Something went wrong. Please try again");
+
+    if (enoughCredits !== null && !enoughCredits) {
+      setOpen(true);
+      return;
+    }
+
+    if (!userId) return toast.error("Something went wrong. Please try again");
+
+    setPhase((curr) => curr + 1);
+
+    const imageId = crypto.randomUUID();
+
+    const creditPromise = decreaseCredits(userId, qualityCost + ratioCost);
+
+    const dbImagePromise = createImage({
+      userId,
+      size: IMAGE_RATIOS.find((obj) => obj.ratio === data.ratio)
+        ?.size as string,
+      prompt: data.prompt,
+      style: "None",
+      standard: data.standard === "standard" ? true : false,
+      imageId,
+    });
+
+    const imagePromise = generateImage({
       imageDetails: IMAGE_RATIOS.find((obj) => obj.ratio === data.ratio),
       prompt: data.prompt,
       standard: data.standard,
-      userId: "HELLO",
+      userId,
+      imageId,
     });
+
+    await Promise.all([imagePromise, creditPromise, dbImagePromise]);
+
+    setTimeout(() => {
+      router.push(`images/${imageId}`);
+    }, 1000);
   };
 
   return (
-    <section className="mx-auto flex w-full max-w-xl flex-col gap-4">
+    <section className="mx-auto flex w-full max-w-7xl flex-col gap-4">
+      <h2 className="text-center text-xl font-bold">Generate Image</h2>
+      <SingleLinkDialog
+        dialogTitle="Not enough credits :'("
+        dialogDescription="It costs money to generate these images, so we have to charge. Get more credits below!"
+        buttonContent="Get Credits"
+        open={open}
+        onOpenChange={setOpen}
+        link="/credits"
+      />
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
@@ -95,7 +164,7 @@ const GenerateImageForm = ({
                     className="flex flex-col space-y-1"
                   >
                     <FormItem className="flex items-center space-x-3 space-y-0">
-                      <FormControl>
+                      <FormControl onClick={() => setRatioCost(5)}>
                         <RadioGroupItem value="square" />
                       </FormControl>
                       <FormLabel className="cursor-pointer font-normal">
@@ -103,19 +172,19 @@ const GenerateImageForm = ({
                       </FormLabel>
                     </FormItem>
                     <FormItem className="flex items-center space-x-3 space-y-0">
-                      <FormControl>
+                      <FormControl onClick={() => setRatioCost(10)}>
                         <RadioGroupItem value="landscape" />
                       </FormControl>
                       <FormLabel className="cursor-pointer font-normal">
-                        Landscape (1024x1792)
+                        Landscape (1792x1024)
                       </FormLabel>
                     </FormItem>
                     <FormItem className="flex items-center space-x-3 space-y-0">
-                      <FormControl>
+                      <FormControl onClick={() => setRatioCost(10)}>
                         <RadioGroupItem value="portrait" />
                       </FormControl>
                       <FormLabel className="cursor-pointer font-normal">
-                        Portrait (1792x1024)
+                        Portrait (1024x1792)
                       </FormLabel>
                     </FormItem>
                   </RadioGroup>
@@ -132,12 +201,11 @@ const GenerateImageForm = ({
                 <FormLabel>Image Quality</FormLabel>
                 <FormControl>
                   <RadioGroup
-                    onValueChange={field.onChange}
                     defaultValue={field.value}
                     className="flex flex-col space-y-1"
                   >
                     <FormItem className="flex items-center space-x-3 space-y-0">
-                      <FormControl>
+                      <FormControl onClick={() => setQualityCost(5)}>
                         <RadioGroupItem value="standard" />
                       </FormControl>
                       <FormLabel className="cursor-pointer font-normal">
@@ -145,7 +213,7 @@ const GenerateImageForm = ({
                       </FormLabel>
                     </FormItem>
                     <FormItem className="flex items-center space-x-3 space-y-0">
-                      <FormControl>
+                      <FormControl onClick={() => setQualityCost(10)}>
                         <RadioGroupItem value="hd" />
                       </FormControl>
                       <FormLabel className="cursor-pointer font-normal">
@@ -158,21 +226,20 @@ const GenerateImageForm = ({
               </FormItem>
             )}
           />
-          {enoughCredits ? (
-            <LoadingButton type="submit" loading={form.formState.isSubmitting}>
-              Generate Image
+          <div className="flex flex-col gap-1">
+            <p className="flex items-center gap-2">
+              Cost <FaCoins /> {qualityCost + ratioCost}
+            </p>
+            <LoadingButton
+              type="submit"
+              disabled={userId === null}
+              loading={form.formState.isSubmitting}
+              className="font-semibold"
+              size="lg"
+            >
+              Generate Image for {qualityCost + ratioCost} Credits
             </LoadingButton>
-          ) : (
-            <SingleLinkDialog
-              dialogTitle="Not enough credits :'("
-              dialogDescription="It costs money to generate these images, so we have to charge. Get more credits below!"
-              triggerButtonContent="Generate Image"
-              buttonContent="Get Credits"
-              open={open}
-              onOpenChange={setOpen}
-              link="/credits"
-            />
-          )}
+          </div>
         </form>
       </Form>
     </section>

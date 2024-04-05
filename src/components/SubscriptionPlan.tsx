@@ -19,7 +19,7 @@ const SubscriptionPlan = async ({
         <div className="flex flex-col">
           <span className="text-sm">Your Plan</span>{" "}
           <div>
-            <span className="text-3xl font-extrabold">{plan}</span>
+            <span className="text-3xl font-bold">{plan}</span>
           </div>
         </div>
         <LogoImage />
@@ -47,7 +47,7 @@ const SubscriptionPlan = async ({
         <LogoImage />
       </div>
 
-      <span className="flex items-center gap-2 text-3xl font-extrabold">
+      <span className="flex items-center gap-2 text-3xl font-bold">
         <FaStar /> {plan}
       </span>
 

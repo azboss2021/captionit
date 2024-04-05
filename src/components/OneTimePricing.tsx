@@ -46,7 +46,7 @@ const OneTimePricing = ({ id }: { id?: string }) => {
                 : (ONE_TIME_PLAN.price / 100).toFixed(2)}
             </span>
           )}
-          <span className="text-4xl font-extrabold tracking-tight">
+          <span className="text-4xl font-bold tracking-tight">
             $
             {(ONE_TIME_PLAN.price * (1 - DISCOUNT)) % 100 === 0
               ? (ONE_TIME_PLAN.price * (1 - DISCOUNT)) / 100

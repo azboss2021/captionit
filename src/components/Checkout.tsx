@@ -12,6 +12,7 @@ import {
 import { PRICE_HIERARCHY, PRODUCT_TYPE } from "@/lib/constants";
 import LoadingButton from "./LoadingButton";
 import { FaPaperPlane } from "react-icons/fa";
+import { FaCoins } from "react-icons/fa6";
 
 const Checkout = ({
   product,
@@ -116,7 +117,9 @@ const Checkout = ({
             PRICE_HIERARCHY.indexOf(product)
         }
       >
-        {output} <FaPaperPlane className="ml-2" />
+        {output}
+        <FaCoins className="ml-2" />
+        {/* <FaPaperPlane className="ml-2" /> */}
       </LoadingButton>
     </form>
   );

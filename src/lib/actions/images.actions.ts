@@ -6,20 +6,45 @@ import { connectToDatabase } from "../mongoose";
 import { decreaseCredits } from "../actions";
 import { handleError } from "../utils";
 import { Image } from "../models";
+import { v2 as cloudinary } from "cloudinary";
+import { string } from "zod";
+import { revalidatePath } from "next/cache";
 
-export async function createImage(
-  userId: string,
-  imageLink: string,
-  size: string,
-) {
+// Cloudinary Access
+cloudinary.config({
+  cloud_name: process.env.CLOUD_NAME!,
+  api_key: process.env.CLOUD_KEY!,
+  api_secret: process.env.CLOUD_SECRET!,
+});
+
+export async function createImage({
+  userId,
+  prompt,
+  size,
+  style,
+  standard,
+  imageId,
+}: {
+  userId: string;
+  prompt: string;
+  size: string;
+  style: string;
+  standard: boolean;
+  imageId: string;
+}) {
   try {
     await connectToDatabase();
 
     const newImage = await Image.create({
-      url: imageLink,
       author: userId,
-      size: size,
+      prompt,
+      size,
+      standard,
+      style,
+      cloudinaryId: imageId,
     });
+
+    revalidatePath("/dashboard");
 
     return JSON.parse(JSON.stringify(newImage));
   } catch (error) {
@@ -37,6 +62,7 @@ export async function generateImage({
   quantity = 1,
   standard = "standard",
   userId,
+  imageId,
 }: {
   imageDetails?: {
     ratio: string;
@@ -54,27 +80,97 @@ export async function generateImage({
   quantity?: number;
   standard: string;
   userId: string;
+  imageId: string;
 }) {
   const openai = new OpenAI({ apiKey: process.env.OPENAI_KEY });
 
-  // const imageResponse = await openai.images.generate({
-  //   model: "dall-e-3",
-  //   prompt: prompt,
-  //   n: quantity,
-  //   quality: standard ? "standard" : "hd",
-  //   size: imageDetails.size,
-  // });
+  const imageResponse = await openai.images.generate({
+    model: "dall-e-3",
+    prompt: prompt,
+    n: quantity,
+    quality: standard === "standard" ? "standard" : "hd",
+    size: imageDetails.size,
+  });
 
-  // if (imageResponse.data) {
-  await decreaseCredits(userId, imageDetails.cost * quantity);
-  await createImage(
-    userId,
-    // imageResponse.data[0].url as string,
-    "https://oaidalleapiprodscus.blob.core.windows.net/private/org-VZc1uvUIbyLfCRnGBHjVjl0Z/user-s0DcKJfoBXkSJOcBfhla7moU/img-FR03yOftSQ3iNFJ2VUM0Yvsi.png?st=2024-03-21T00%3A29%3A38Z&se=2024-03-21T02%3A29%3A38Z&sp=r&sv=2021-08-06&sr=b&rscd=inline&rsct=image/png&skoid=6aaadede-4fb3-4698-a8f6-684d7786b067&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2024-03-20T23%3A21%3A19Z&ske=2024-03-21T23%3A21%3A19Z&sks=b&skv=2021-08-06&sig=AOdZ6SWOaKXwZDM207yg7SSWKUz9xE5N7iRliESnp0Q%3D",
-    imageDetails.size as string,
-  );
-  // }
+  const imageUrl = imageResponse.data[0]?.url;
 
-  // console.log(response.data);
-  return "https://oaidalleapiprodscus.blob.core.windows.net/private/org-VZc1uvUIbyLfCRnGBHjVjl0Z/user-s0DcKJfoBXkSJOcBfhla7moU/img-FR03yOftSQ3iNFJ2VUM0Yvsi.png?st=2024-03-21T00%3A29%3A38Z&se=2024-03-21T02%3A29%3A38Z&sp=r&sv=2021-08-06&sr=b&rscd=inline&rsct=image/png&skoid=6aaadede-4fb3-4698-a8f6-684d7786b067&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2024-03-20T23%3A21%3A19Z&ske=2024-03-21T23%3A21%3A19Z&sks=b&skv=2021-08-06&sig=AOdZ6SWOaKXwZDM207yg7SSWKUz9xE5N7iRliESnp0Q%3D";
+  if (!imageUrl) {
+    throw new Error("No image URL found in the response.");
+  }
+
+  const response = await fetch(imageUrl);
+  const arrayBuffer = await response.arrayBuffer();
+  const buffer = Buffer.from(arrayBuffer);
+
+  await new Promise((resolve, reject) => {
+    cloudinary.uploader
+      .upload_stream(
+        {
+          tags: [userId],
+          public_id: imageId,
+        },
+        function (error, result) {
+          if (error) {
+            reject(error);
+            return;
+          }
+          resolve(result);
+        },
+      )
+      .end(buffer);
+  });
+
+  return {
+    success: true,
+    data: imageId,
+  };
+}
+
+export async function getIsUpvoted({
+  cloudinaryId,
+  userId,
+}: {
+  cloudinaryId: string;
+  userId: string;
+}) {
+  const image = await Image.findOne({ cloudinaryId, upvotes: userId });
+  return !!image;
+}
+
+export async function upvoteImage(
+  cloudinaryId: string,
+  userId: string,
+): Promise<void> {
+  try {
+    const image = await Image.findOne({ cloudinaryId, upvotes: userId });
+    if (image) return;
+    await Image.updateOne({ cloudinaryId }, { $addToSet: { upvotes: userId } });
+  } catch (error) {
+    handleError(error);
+  }
+}
+
+export async function removeUpvoteImage(
+  cloudinaryId: string,
+  userId: string,
+): Promise<void> {
+  try {
+    const image = await Image.findOne({ cloudinaryId, upvotes: userId });
+    if (!image) return;
+    await Image.updateOne({ cloudinaryId }, { $pull: { upvotes: userId } });
+  } catch (error) {
+    handleError(error);
+  }
+}
+
+export async function getVoteCount({ cloudinaryId }: { cloudinaryId: string }) {
+  const result = await Image.aggregate([
+    { $match: { cloudinaryId } },
+    { $project: { upvoteCount: { $size: "$upvotes" } } },
+  ]);
+
+  // Extract the upvote count from the result
+  const upvoteCount = result.length > 0 ? result[0].upvoteCount : 0;
+
+  return upvoteCount;
 }
