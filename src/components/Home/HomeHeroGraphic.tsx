@@ -12,7 +12,7 @@ const HomeHeroGraphic = ({ className }: { className: string }) => {
   return (
     <div className={className}>
       <Image
-        src="/pikachu.jpg"
+        src="/hero_no_bg.png"
         width={image.width}
         height={image.height}
         alt={image.alt}
