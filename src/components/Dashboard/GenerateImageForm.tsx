@@ -23,6 +23,7 @@ import { useSession } from "next-auth/react";
 import { decreaseCredits, getUserByEmail } from "@/lib/actions";
 import { FaCoins } from "react-icons/fa6";
 import { useRouter } from "next/navigation";
+import { Session } from "next-auth";
 
 const FormSchema = z.object({
   prompt: z
@@ -40,9 +41,11 @@ const FormSchema = z.object({
 const GenerateImageForm = ({
   setPhase,
   setLoadingState,
+  session,
 }: {
   setPhase: React.Dispatch<React.SetStateAction<number>>;
   setLoadingState: React.Dispatch<React.SetStateAction<string>>;
+  session: Session | null;
 }) => {
   const [enoughCredits, setEnoughCredits] = useState<boolean | null>(null);
   const [userId, setUserId] = useState<string | null>(null);
@@ -50,31 +53,32 @@ const GenerateImageForm = ({
   const [ratioCost, setRatioCost] = useState(0);
   const [qualityCost, setQualityCost] = useState(0);
   const [open, setOpen] = useState(false);
-  const [userCredits, setUserCredits] = useState(0);
-
-  const { data: session } = useSession();
+  const [userCredits, setUserCredits] = useState<number>(0);
   const router = useRouter();
 
   useEffect(() => {
-    if (!session) return;
-
     const getCredits = async () => {
       const user = await getUserByEmail(session?.user?.email as string);
       setUserId(user._id);
       setUserCredits(user.credits);
+      checkCredits(user.credits);
     };
+
     getCredits();
   }, []);
 
   useEffect(() => {
     setCost(10 + qualityCost + ratioCost);
+    checkCredits(userCredits);
   }, [qualityCost, ratioCost]);
 
-  useEffect(() => {
-    if (userCredits < cost) {
+  const checkCredits = (credits: number) => {
+    if (credits < cost) {
       setEnoughCredits(false);
     } else setEnoughCredits(true);
-  }, [cost]);
+
+    console.log(credits, cost);
+  };
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -241,7 +245,7 @@ const GenerateImageForm = ({
             </p>
             <LoadingButton
               type="submit"
-              disabled={userId === null}
+              disabled={!userId}
               loading={form.formState.isSubmitting}
               className="font-semibold"
               size="lg"
