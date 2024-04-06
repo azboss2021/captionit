@@ -46,26 +46,35 @@ const GenerateImageForm = ({
 }) => {
   const [enoughCredits, setEnoughCredits] = useState<boolean | null>(null);
   const [userId, setUserId] = useState<string | null>(null);
-  const [ratioCost, setRatioCost] = useState(5);
-  const [qualityCost, setQualityCost] = useState(5);
+  const [cost, setCost] = useState(10);
+  const [ratioCost, setRatioCost] = useState(0);
+  const [qualityCost, setQualityCost] = useState(0);
   const [open, setOpen] = useState(false);
+  const [userCredits, setUserCredits] = useState(0);
 
-  const necessaryCredits = 5;
   const { data: session } = useSession();
   const router = useRouter();
 
   useEffect(() => {
     if (!session) return;
+
     const getCredits = async () => {
       const user = await getUserByEmail(session?.user?.email as string);
       setUserId(user._id);
-      if (user.credits < necessaryCredits) {
-        setEnoughCredits(false);
-      } else setEnoughCredits(true);
+      setUserCredits(user.credits);
     };
-
     getCredits();
-  }, [session]);
+  }, []);
+
+  useEffect(() => {
+    setCost(10 + qualityCost + ratioCost);
+  }, [qualityCost, ratioCost]);
+
+  useEffect(() => {
+    if (userCredits < cost) {
+      setEnoughCredits(false);
+    } else setEnoughCredits(true);
+  }, [cost]);
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -164,7 +173,7 @@ const GenerateImageForm = ({
                     className="flex flex-col space-y-1"
                   >
                     <FormItem className="flex items-center space-x-3 space-y-0">
-                      <FormControl onClick={() => setRatioCost(5)}>
+                      <FormControl onClick={() => setRatioCost(0)}>
                         <RadioGroupItem value="square" />
                       </FormControl>
                       <FormLabel className="cursor-pointer font-normal">
@@ -172,7 +181,7 @@ const GenerateImageForm = ({
                       </FormLabel>
                     </FormItem>
                     <FormItem className="flex items-center space-x-3 space-y-0">
-                      <FormControl onClick={() => setRatioCost(10)}>
+                      <FormControl onClick={() => setRatioCost(5)}>
                         <RadioGroupItem value="landscape" />
                       </FormControl>
                       <FormLabel className="cursor-pointer font-normal">
@@ -180,7 +189,7 @@ const GenerateImageForm = ({
                       </FormLabel>
                     </FormItem>
                     <FormItem className="flex items-center space-x-3 space-y-0">
-                      <FormControl onClick={() => setRatioCost(10)}>
+                      <FormControl onClick={() => setRatioCost(5)}>
                         <RadioGroupItem value="portrait" />
                       </FormControl>
                       <FormLabel className="cursor-pointer font-normal">
@@ -205,7 +214,7 @@ const GenerateImageForm = ({
                     className="flex flex-col space-y-1"
                   >
                     <FormItem className="flex items-center space-x-3 space-y-0">
-                      <FormControl onClick={() => setQualityCost(5)}>
+                      <FormControl onClick={() => setQualityCost(0)}>
                         <RadioGroupItem value="standard" />
                       </FormControl>
                       <FormLabel className="cursor-pointer font-normal">
@@ -213,7 +222,7 @@ const GenerateImageForm = ({
                       </FormLabel>
                     </FormItem>
                     <FormItem className="flex items-center space-x-3 space-y-0">
-                      <FormControl onClick={() => setQualityCost(10)}>
+                      <FormControl onClick={() => setQualityCost(5)}>
                         <RadioGroupItem value="hd" />
                       </FormControl>
                       <FormLabel className="cursor-pointer font-normal">
@@ -228,7 +237,7 @@ const GenerateImageForm = ({
           />
           <div className="flex flex-col gap-1">
             <p className="flex items-center gap-2">
-              Cost <FaCoins /> {qualityCost + ratioCost}
+              Cost <FaCoins /> {cost}
             </p>
             <LoadingButton
               type="submit"
@@ -237,7 +246,7 @@ const GenerateImageForm = ({
               className="font-semibold"
               size="lg"
             >
-              Generate Image for {qualityCost + ratioCost} Credits
+              Generate Image for {cost} Credits
             </LoadingButton>
           </div>
         </form>

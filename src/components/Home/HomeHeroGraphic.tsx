@@ -2,7 +2,6 @@ import Image from "next/image";
 
 // EDIT THESE
 const image = {
-  src: "/HeroNoBg.png",
   alt: "Hero Image",
   width: 2000,
   height: 2000,
