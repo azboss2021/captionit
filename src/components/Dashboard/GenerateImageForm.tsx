@@ -49,7 +49,7 @@ const GenerateImageForm = ({
 }) => {
   const [enoughCredits, setEnoughCredits] = useState<boolean | null>(null);
   const [userId, setUserId] = useState<string | null>(null);
-  const [cost, setCost] = useState(10);
+  const [defaultCost, setDefaultCost] = useState(10);
   const [ratioCost, setRatioCost] = useState(0);
   const [qualityCost, setQualityCost] = useState(0);
   const [open, setOpen] = useState(false);
@@ -68,16 +68,15 @@ const GenerateImageForm = ({
   }, []);
 
   useEffect(() => {
-    setCost(10 + qualityCost + ratioCost);
     checkCredits(userCredits);
   }, [qualityCost, ratioCost]);
 
   const checkCredits = (credits: number) => {
-    if (credits < cost) {
+    if (credits < defaultCost + ratioCost + qualityCost) {
       setEnoughCredits(false);
     } else setEnoughCredits(true);
 
-    console.log(credits, cost);
+    console.log(credits, defaultCost + ratioCost + qualityCost);
   };
 
   const form = useForm<z.infer<typeof FormSchema>>({
@@ -241,7 +240,7 @@ const GenerateImageForm = ({
           />
           <div className="flex flex-col gap-1">
             <p className="flex items-center gap-2">
-              Cost <FaCoins /> {cost}
+              Cost <FaCoins /> {defaultCost + ratioCost + qualityCost}
             </p>
             <LoadingButton
               type="submit"
@@ -250,7 +249,7 @@ const GenerateImageForm = ({
               className="font-semibold"
               size="lg"
             >
-              Generate Image for {cost} Credits
+              Generate Image for {defaultCost + ratioCost + qualityCost} Credits
             </LoadingButton>
           </div>
         </form>
