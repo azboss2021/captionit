@@ -75,8 +75,6 @@ const GenerateImageForm = ({
     if (credits < defaultCost + ratioCost + qualityCost) {
       setEnoughCredits(false);
     } else setEnoughCredits(true);
-
-    console.log(credits, defaultCost + ratioCost + qualityCost);
   };
 
   const form = useForm<z.infer<typeof FormSchema>>({
@@ -104,7 +102,10 @@ const GenerateImageForm = ({
 
     const imageId = crypto.randomUUID();
 
-    const creditPromise = decreaseCredits(userId, qualityCost + ratioCost);
+    const creditPromise = decreaseCredits(
+      userId,
+      defaultCost + qualityCost + ratioCost,
+    );
 
     const dbImagePromise = createImage({
       userId,
@@ -214,6 +215,7 @@ const GenerateImageForm = ({
                 <FormControl>
                   <RadioGroup
                     defaultValue={field.value}
+                    onValueChange={field.onChange}
                     className="flex flex-col space-y-1"
                   >
                     <FormItem className="flex items-center space-x-3 space-y-0">
