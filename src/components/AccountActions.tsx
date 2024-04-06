@@ -107,7 +107,7 @@ const AccountActions = ({ user }: { user: DatabaseUser }) => {
         <SingleActionDialog
           buttonClassName="w-fit font-semibold"
           dialogTitle="Delete Account"
-          dialogDescription="This is a permanent action. This means you will lose ALL information related to your account."
+          dialogDescription="This is a permanent action. This means you will lose ALL information related to your account. You can never create an account with this same email again."
           triggerButtonContent={
             <>
               Delete Account <FaTrash className="ml-2" />
