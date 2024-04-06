@@ -2,7 +2,7 @@ import Image from "next/image";
 
 // EDIT THESE
 const image = {
-  link: "/HeroNoBg.png",
+  src: "/HeroNoBg.png",
   alt: "Hero Image",
   width: 2000,
   height: 2000,
@@ -12,7 +12,7 @@ const HomeHeroGraphic = ({ className }: { className: string }) => {
   return (
     <div className={className}>
       <Image
-        src={image.link}
+        src="/pikachu.jpg"
         width={image.width}
         height={image.height}
         alt={image.alt}
