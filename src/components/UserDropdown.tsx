@@ -69,7 +69,7 @@ const UserDropdown = ({ image }: { image: string }) => {
             Support <FaTools size={14} />
           </Link>
         </DropdownMenuItem>
-        <DropdownMenuSeparator />
+        {/* <DropdownMenuSeparator />
         <DropdownMenuItem
           className="flex cursor-pointer items-center justify-between p-4"
           onClick={() =>
@@ -85,7 +85,7 @@ const UserDropdown = ({ image }: { image: string }) => {
               Light Theme <FaSun size={14} />
             </>
           )}
-        </DropdownMenuItem>
+        </DropdownMenuItem> */}
         <DropdownMenuSeparator />
         <DropdownMenuItem
           onClick={async () => {
