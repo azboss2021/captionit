@@ -10,13 +10,6 @@ import { v2 as cloudinary } from "cloudinary";
 import { string } from "zod";
 import { revalidatePath } from "next/cache";
 
-// Cloudinary Access
-cloudinary.config({
-  cloud_name: process.env.CLOUD_NAME!,
-  api_key: process.env.CLOUD_KEY!,
-  api_secret: process.env.CLOUD_SECRET!,
-});
-
 export async function createImage({
   userId,
   prompt,
@@ -101,6 +94,12 @@ export async function generateImage({
   const response = await fetch(imageUrl);
   const arrayBuffer = await response.arrayBuffer();
   const buffer = Buffer.from(arrayBuffer);
+
+  cloudinary.config({
+    cloud_name: process.env.CLOUD_NAME!,
+    api_key: process.env.CLOUD_KEY!,
+    api_secret: process.env.CLOUD_SECRET!,
+  });
 
   await new Promise((resolve, reject) => {
     cloudinary.uploader

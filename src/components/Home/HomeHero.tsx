@@ -6,7 +6,7 @@ const HomeHero = () => {
   return (
     <div className="mx-auto flex w-full max-w-7xl flex-col items-center justify-center gap-16 px-8 py-12 lg:flex-row lg:items-start lg:py-20">
       <HomeHeroLeft />
-      <HomeHeroGraphic className="relative w-full basis-1/2 max-md:-m-4" />
+      <HomeHeroGraphic className="relative w-full basis-3/5 bg-gray-100 max-md:-m-4 lg:p-6" />
     </div>
 
     // <div className="mx-auto flex w-full max-w-7xl flex-col items-center justify-center gap-16 px-8 py-12">

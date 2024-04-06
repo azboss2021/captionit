@@ -2,10 +2,10 @@ import Image from "next/image";
 
 // EDIT THESE
 const image = {
-  link: "/pikachu.jpg",
-  alt: "",
-  width: 1080,
-  height: 1080,
+  link: "/HeroNoBg.png",
+  alt: "Hero Image",
+  width: 2000,
+  height: 2000,
 };
 
 const HomeHeroGraphic = ({ className }: { className: string }) => {
@@ -16,7 +16,7 @@ const HomeHeroGraphic = ({ className }: { className: string }) => {
         width={image.width}
         height={image.height}
         alt={image.alt}
-        className="mx-auto ml-auto w-full max-w-xl rounded-xl"
+        className="mx-auto ml-auto w-full rounded-xl"
         fetchPriority="high"
         decoding="async"
       />

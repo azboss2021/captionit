@@ -46,7 +46,7 @@ export const SIDE_BY_SIDE_BAD = {
 };
 
 export const DEMO = {
-  videoLink: "https://www.youtube.com/embed/GyJPzwM__v4?si=1FbXhbPuA8qh5mzh",
+  videoLink: "https://www.youtube.com/embed/9DapZ_-stPY?si=gfo210ukSbHIANKl",
   title: "Demo",
   subtitle: "How it works:",
 };

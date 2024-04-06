@@ -8,5 +8,6 @@ export const config = {
     "/support",
     "/images",
     "/create",
+    "/caption",
   ],
 };
