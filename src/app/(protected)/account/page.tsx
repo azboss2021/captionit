@@ -11,7 +11,7 @@ import AccountInformation from "@/components/AccountInformation";
 import AccountActions from "@/components/AccountActions";
 
 export const metadata: Metadata = {
-  title: `${SAAS_NAME} - Dashboard`,
+  title: `${SAAS_NAME} - Account`,
   description: SAAS_DESCRIPTION,
 };
 
@@ -22,7 +22,7 @@ const AccountPage = async () => {
 
   return (
     <>
-      <InfoBanner />
+      {/* <InfoBanner /> */}
       <div className="border-b">
         <Navbar />
       </div>

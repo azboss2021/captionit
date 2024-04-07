@@ -119,6 +119,8 @@ export async function generateImage({
       .end(buffer);
   });
 
+  revalidatePath("/dashboard");
+
   return {
     success: true,
     data: imageId,

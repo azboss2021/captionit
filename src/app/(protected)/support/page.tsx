@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 const SupportPage = () => {
   return (
     <>
-      <InfoBanner />
+      {/* <InfoBanner /> */}
       <div className="border-b">
         <Navbar />
       </div>

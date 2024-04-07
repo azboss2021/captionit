@@ -4,9 +4,16 @@ import LeaveButton from "@/components/LeaveButton";
 import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import { getCaptionById } from "@/lib/actions/caption.actions";
+import { SAAS_DESCRIPTION, SAAS_NAME } from "@/lib/constants";
 import { Image } from "@/lib/models";
 import { connectToDatabase } from "@/lib/mongoose";
+import { Metadata } from "next";
 import { FaFlag } from "react-icons/fa6";
+
+export const metadata: Metadata = {
+  title: `${SAAS_NAME} - View Caption`,
+  description: SAAS_DESCRIPTION,
+};
 
 const ViewCaptionPage = async ({ params }: { params: { id: string } }) => {
   const caption = await getCaptionById({ id: params.id });
@@ -19,7 +26,7 @@ const ViewCaptionPage = async ({ params }: { params: { id: string } }) => {
 
   return (
     <>
-      <InfoBanner />
+      {/* <InfoBanner /> */}
       <div className="border-b">
         <Navbar />
       </div>

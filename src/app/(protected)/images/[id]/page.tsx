@@ -11,10 +11,17 @@ import { Button } from "@/components/ui/button";
 import { getUserByEmail } from "@/lib/actions";
 import { getAuthoredCaptionsById } from "@/lib/actions/caption.actions";
 import { getIsUpvoted, getVoteCount } from "@/lib/actions/images.actions";
+import { SAAS_DESCRIPTION, SAAS_NAME } from "@/lib/constants";
 import { Image, User } from "@/lib/models";
 import { connectToDatabase } from "@/lib/mongoose";
+import { Metadata } from "next";
 import { getServerSession } from "next-auth";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+  title: `${SAAS_NAME} - View Image`,
+  description: SAAS_DESCRIPTION,
+};
 
 const ImagePage = async ({ params }: { params: { id: string } }) => {
   const sessionPromise = getServerSession(options);
@@ -51,7 +58,7 @@ const ImagePage = async ({ params }: { params: { id: string } }) => {
 
   return (
     <>
-      <InfoBanner />
+      {/* <InfoBanner /> */}
       <div className="border-b">
         <Navbar />
       </div>

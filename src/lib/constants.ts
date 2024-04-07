@@ -273,6 +273,30 @@ export const FAQ_LINKS = {
   mailLink: "mailto:cwilsonfun@gmail.com",
 };
 
+export const HOME_FEATURES = [
+  {
+    imageSrc: "/generate_image.jpg",
+    imageName: "Step 1",
+    imageSubtitle: "Create Image with AI",
+    imageDescription:
+      "Fill out the simple form to create any AI image you want. Choose the aspect ratio and quality of the image.",
+  },
+  {
+    imageSrc: "/create_caption.jpg",
+    imageName: "Step 2",
+    imageSubtitle: "Customize Your Caption",
+    imageDescription:
+      "Create a caption with any text size, positioning, and stroke you want. Make it funny, sad, informative, etc.",
+  },
+  {
+    imageSrc: "/save_image.jpg",
+    imageName: "Step 3",
+    imageSubtitle: "Share Your Work",
+    imageDescription:
+      "Share your work with others after creating this masterpiece.",
+  },
+];
+
 export const FAQ_QUESTIONS = [
   {
     question: "How many images can I generate for free?",
@@ -282,20 +306,20 @@ export const FAQ_QUESTIONS = [
     question: "What styles are there to choose from?",
     answer: "Styles are still being added.",
   },
-  {
-    question: "What is the question?",
-    answer: "This is the answer to your question 3!",
-  },
-  {
-    question: "What is the question?",
-    answer: "This is the answer to your question 4!",
-  },
-  {
-    question: "What is the question?",
-    answer: "This is the answer to your question 5!",
-  },
-  {
-    question: "What is the question?",
-    answer: "This is the answer to your question 6!",
-  },
+  // {
+  //   question: "What is the question?",
+  //   answer: "This is the answer to your question 3!",
+  // },
+  // {
+  //   question: "What is the question?",
+  //   answer: "This is the answer to your question 4!",
+  // },
+  // {
+  //   question: "What is the question?",
+  //   answer: "This is the answer to your question 5!",
+  // },
+  // {
+  //   question: "What is the question?",
+  //   answer: "This is the answer to your question 6!",
+  // },
 ];

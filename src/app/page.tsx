@@ -12,7 +12,7 @@ import HomeBackground from "@/components/Home/HomeBackground";
 import HomeTestimonialWall from "@/components/Home/HomeTestimonialWall";
 import HomeTestimonials from "@/components/Home/HomeTestimonials";
 import HomeSingleTestimonial from "@/components/Home/HomeSingleTestimonial";
-import HeroImageDescription from "@/components/Home/HeroImageDescription";
+import HeroImageDescription from "@/components/Home/HomeImageDescription";
 
 import { getServerSession } from "next-auth";
 import { options } from "./api/auth/[...nextauth]/options";
