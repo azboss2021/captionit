@@ -131,7 +131,7 @@ export const CREDIT_PLANS = [
     _id: 1,
     name: "Some Credits",
     description: "Some credits for you :)",
-    price: 800,
+    price: 50,
     credits: 200,
     bestChoice: false,
     useBadge: false,
