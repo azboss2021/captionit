@@ -9,7 +9,7 @@ import { Session } from "next-auth";
 const GenerateImages = ({ session }: { session: Session | null }) => {
   const [phase, setPhase] = useState(0);
   const [loadingState, setLoadingState] = useState(
-    "Sending prompt to our artists...",
+    "Generating image... (Don't click off this screen)",
   );
 
   if (phase === 0)
