@@ -116,17 +116,23 @@ const GenerateImageForm = ({
         imageId,
       });
 
-      const imageUrl = await generateImage({
-        imageDetails: IMAGE_RATIOS.find((obj) => obj.ratio === data.ratio),
-        prompt: data.prompt,
-        standard: data.standard,
-        userId,
-        imageId,
+      const generateImageResponse = await fetch("/api/generateImage", {
+        method: "POST",
+        body: JSON.stringify({
+          userId,
+          imageDetails: IMAGE_RATIOS.find((obj) => obj.ratio === data.ratio),
+          prompt: data.prompt,
+          standard: data.standard,
+          imageId,
+        }),
       });
 
-      if (!imageUrl) {
+      if (!generateImageResponse.ok) {
         console.error("No image URL found in the response.");
       }
+
+      const responseData = await generateImageResponse.json();
+      const imageUrl = responseData.imageUrl;
 
       const response = await fetch("/api/cloudinary", {
         method: "POST",
