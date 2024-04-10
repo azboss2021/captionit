@@ -14,7 +14,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import toast from "react-hot-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { createImage, generateImage } from "@/lib/actions/images.actions";
+import { createImage } from "@/lib/actions/images.actions";
 import { Textarea } from "../ui/textarea";
 import SingleLinkDialog from "../SingleLinkDialog";
 import { useEffect, useState } from "react";
@@ -25,6 +25,9 @@ import { useRouter } from "next/navigation";
 import { Session } from "next-auth";
 import { connectToDatabase } from "@/lib/mongoose";
 import { Image } from "@/lib/models";
+import { createClient } from "next-server-task/client";
+import { type GenerateImage } from "@/app/api/generate-image/route";
+const client = createClient<GenerateImage>();
 
 const FormSchema = z.object({
   prompt: z
@@ -56,6 +59,8 @@ const GenerateImageForm = ({
   const [open, setOpen] = useState(false);
   const [userCredits, setUserCredits] = useState<number>(0);
   const router = useRouter();
+
+  const { mutate, isMutating } = client.useTask("/api/generate-image");
 
   useEffect(() => {
     const getCredits = async () => {
@@ -116,23 +121,14 @@ const GenerateImageForm = ({
         imageId,
       });
 
-      const generateImageResponse = await fetch("/api/generateImage", {
-        method: "POST",
-        body: JSON.stringify({
-          userId,
-          imageDetails: IMAGE_RATIOS.find((obj) => obj.ratio === data.ratio),
-          prompt: data.prompt,
-          standard: data.standard,
-          imageId,
-        }),
+      const generateImageResult = await mutate({
+        userId,
+        imageDetails: IMAGE_RATIOS.find((obj) => obj.ratio === data.ratio),
+        prompt: data.prompt,
+        standard: data.standard,
+        imageId,
       });
-
-      if (!generateImageResponse.ok) {
-        console.error("No image URL found in the response.");
-      }
-
-      const responseData = await generateImageResponse.json();
-      const imageUrl = responseData.imageUrl;
+      const imageUrl = generateImageResult.url;
 
       const response = await fetch("/api/cloudinary", {
         method: "POST",

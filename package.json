@@ -35,6 +35,7 @@
     "next-auth": "^4.24.6",
     "next-cloudinary": "^6.3.0",
     "next-nprogress-bar": "^2.3.4",
+    "next-server-task": "^0.1.2",
     "next-themes": "^0.2.1",
     "openai": "^4.29.2",
     "prettier": "^3.2.5",
