@@ -19,11 +19,12 @@ import { Textarea } from "../ui/textarea";
 import SingleLinkDialog from "../SingleLinkDialog";
 import { useEffect, useState } from "react";
 import { IMAGE_RATIOS } from "@/lib/constants";
-import { useSession } from "next-auth/react";
 import { decreaseCredits, getUserByEmail } from "@/lib/actions";
 import { FaCoins } from "react-icons/fa6";
 import { useRouter } from "next/navigation";
 import { Session } from "next-auth";
+import { connectToDatabase } from "@/lib/mongoose";
+import { Image } from "@/lib/models";
 
 const FormSchema = z.object({
   prompt: z
@@ -84,7 +85,7 @@ const GenerateImageForm = ({
       ratio: "square",
       standard: "standard",
     },
-    // mode: "onChange",
+    mode: "onChange",
   });
 
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
@@ -102,34 +103,43 @@ const GenerateImageForm = ({
 
     const imageId = crypto.randomUUID();
 
-    const creditPromise = decreaseCredits(
-      userId,
-      defaultCost + qualityCost + ratioCost,
-    );
+    await decreaseCredits(userId, defaultCost + qualityCost + ratioCost);
 
-    const dbImagePromise = createImage({
-      userId,
-      size: IMAGE_RATIOS.find((obj) => obj.ratio === data.ratio)
-        ?.size as string,
-      prompt: data.prompt,
-      style: "None",
-      standard: data.standard === "standard" ? true : false,
-      imageId,
-    });
+    try {
+      const newImage = await createImage({
+        userId,
+        prompt: data.prompt,
+        size: IMAGE_RATIOS.find((obj) => obj.ratio === data.ratio)
+          ?.size as string,
+        style: "None",
+        standard: data.standard === "standard" ? true : false,
+        imageId,
+      });
 
-    const imagePromise = generateImage({
-      imageDetails: IMAGE_RATIOS.find((obj) => obj.ratio === data.ratio),
-      prompt: data.prompt,
-      standard: data.standard,
-      userId,
-      imageId,
-    });
+      const imageUrl = await generateImage({
+        imageDetails: IMAGE_RATIOS.find((obj) => obj.ratio === data.ratio),
+        prompt: data.prompt,
+        standard: data.standard,
+        userId,
+        imageId,
+      });
 
-    await Promise.all([imagePromise, creditPromise, dbImagePromise]);
+      if (!imageUrl) {
+        console.error("No image URL found in the response.");
+      }
 
-    setTimeout(() => {
-      router.push(`images/${imageId}`);
-    }, 1000);
+      const response = await fetch("/api/cloudinary", {
+        method: "POST",
+        body: JSON.stringify({ imageUrl, userId, imageId }),
+      });
+
+      if (!response.ok) throw Error("Status code: " + response.status);
+    } catch (error) {
+      console.error(error);
+      return;
+    }
+
+    router.push(`images/${imageId}`);
   };
 
   return (

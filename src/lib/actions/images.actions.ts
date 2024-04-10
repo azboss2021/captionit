@@ -1,14 +1,9 @@
 "use server";
 
 import OpenAI from "openai";
-import { IMAGE_RATIOS } from "../constants";
 import { connectToDatabase } from "../mongoose";
-import { decreaseCredits } from "../actions";
 import { handleError } from "../utils";
 import { Image } from "../models";
-import { v2 as cloudinary } from "cloudinary";
-import { string } from "zod";
-import { revalidatePath } from "next/cache";
 
 export async function createImage({
   userId,
@@ -37,8 +32,6 @@ export async function createImage({
       cloudinaryId: imageId,
     });
 
-    revalidatePath("/dashboard");
-
     return JSON.parse(JSON.stringify(newImage));
   } catch (error) {
     handleError(error);
@@ -54,8 +47,6 @@ export async function generateImage({
   prompt,
   quantity = 1,
   standard = "standard",
-  userId,
-  imageId,
 }: {
   imageDetails?: {
     ratio: string;
@@ -85,46 +76,7 @@ export async function generateImage({
     size: imageDetails.size,
   });
 
-  const imageUrl = imageResponse.data[0]?.url;
-
-  if (!imageUrl) {
-    throw new Error("No image URL found in the response.");
-  }
-
-  const response = await fetch(imageUrl);
-  const arrayBuffer = await response.arrayBuffer();
-  const buffer = Buffer.from(arrayBuffer);
-
-  cloudinary.config({
-    cloud_name: process.env.CLOUD_NAME!,
-    api_key: process.env.CLOUD_KEY!,
-    api_secret: process.env.CLOUD_SECRET!,
-  });
-
-  await new Promise((resolve, reject) => {
-    cloudinary.uploader
-      .upload_stream(
-        {
-          tags: [userId],
-          public_id: imageId,
-        },
-        function (error, result) {
-          if (error) {
-            reject(error);
-            return;
-          }
-          resolve(result);
-        },
-      )
-      .end(buffer);
-  });
-
-  revalidatePath("/dashboard");
-
-  return {
-    success: true,
-    data: imageId,
-  };
+  return imageResponse.data[0]?.url;
 }
 
 export async function getIsUpvoted({
